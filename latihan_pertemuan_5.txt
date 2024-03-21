@@ -1,0 +1,432 @@
+MariaDB [(none)]> show databases;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbti02                  |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+10 rows in set (0.001 sec)
+
+MariaDB [(none)]> use dbti02;
+Database changed
+MariaDB [dbti02]> show tables;
++------------------+
+| Tables_in_dbti02 |
++------------------+
+| barang           |
+| jenis            |
++------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select nama, stok, harga from barang;
++-------------------+------+---------+
+| nama              | stok | harga   |
++-------------------+------+---------+
+| TV SHARP 60 INCH  |   10 | 2000000 |
+| AC Panasonic 2 PK |   10 | 5000000 |
+| Meja Belajar      |   50 |  400000 |
+| Ayam Geprek       |  100 |   15000 |
+| Es Teh            |  120 |    5000 |
+| Kopi Pahit        |   50 |   10000 |
++-------------------+------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select nama, harga from barang;
++-------------------+---------+
+| nama              | harga   |
++-------------------+---------+
+| TV SHARP 60 INCH  | 2000000 |
+| AC Panasonic 2 PK | 5000000 |
+| Meja Belajar      |  400000 |
+| Ayam Geprek       |   15000 |
+| Es Teh            |    5000 |
+| Kopi Pahit        |   10000 |
++-------------------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where harga <=5000000;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga >= 5000000;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga >=5000000 AND stok <= 10;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga >=5000000 OR stok <= 10;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> SELECT nama, harga, stok from mahasiswa;
+ERROR 1146 (42S02): Table 'dbti02.mahasiswa' doesn't exist
+MariaDB [dbti02]> SELECT nama, harga, stok from barang;
++-------------------+---------+------+
+| nama              | harga   | stok |
++-------------------+---------+------+
+| TV SHARP 60 INCH  | 2000000 |   10 |
+| AC Panasonic 2 PK | 5000000 |   10 |
+| Meja Belajar      |  400000 |   50 |
+| Ayam Geprek       |   15000 |  100 |
+| Es Teh            |    5000 |  120 |
+| Kopi Pahit        |   10000 |   50 |
++-------------------+---------+------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where kode='AC01';
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+1 row in set (0.007 sec)
+
+MariaDB [dbti02]> select * from barang where stok = 5;
+Empty set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where stok = 10;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where kode in ('TV01', 'AC01');
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+2 rows in set (0.008 sec)
+
+MariaDB [dbti02]> select * from barang where kode not in ('TV01', 'AC01');
++----+------+--------------+--------+------+---------+
+| id | kode | nama         | harga  | stok | idjenis |
++----+------+--------------+--------+------+---------+
+|  3 | MJ02 | Meja Belajar | 400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek  |  15000 |  100 |       3 |
+|  6 | ET04 | Es Teh       |   5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit   |  10000 |   50 |       4 |
++----+------+--------------+--------+------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang order by nama asc;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang order by harga desc;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang harga where >= 15000 order by harga asc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '>= 15000 order by harga asc' at line 1
+MariaDB [dbti02]> select * from barang where harga >= 15000 order by harga asc;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga >= 15000 order by nama asc;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga >= 15000 order by nama desc;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
++----+------+-------------------+---------+------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang limit 2 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
+|  6 | ET04 | Es Teh      |  5000 |  120 |       4 |
++----+------+-------------+-------+------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang limit 4 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
+|  6 | ET04 | Es Teh      |  5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit  | 10000 |   50 |       4 |
++----+------+-------------+-------+------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang limit 5 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
+|  6 | ET04 | Es Teh      |  5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit  | 10000 |   50 |       4 |
++----+------+-------------+-------+------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang limit 6 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
+|  6 | ET04 | Es Teh      |  5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit  | 10000 |   50 |       4 |
++----+------+-------------+-------+------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang limit 7 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
+|  6 | ET04 | Es Teh      |  5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit  | 10000 |   50 |       4 |
++----+------+-------------+-------+------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang limit 1 offset 3;
++----+------+-------------+-------+------+---------+
+| id | kode | nama        | harga | stok | idjenis |
++----+------+-------------+-------+------+---------+
+|  4 | AG03 | Ayam Geprek | 15000 |  100 |       3 |
++----+------+-------------+-------+------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select count(*) from produk;
+ERROR 1146 (42S02): Table 'dbti02.produk' doesn't exist
+MariaDB [dbti02]> select count(*) from barang;
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select count(*) as "Data Barang" from barang;
++-------------+
+| Data Barang |
++-------------+
+|           6 |
++-------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select max(harga) as "Produk Termahal" from barang;
++-----------------+
+| Produk Termahal |
++-----------------+
+|         5000000 |
++-----------------+
+1 row in set (0.007 sec)
+
+MariaDB [dbti02]> select min(harga) as "Produk Termurah" from barang;
++-----------------+
+| Produk Termurah |
++-----------------+
+|            5000 |
++-----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select avg(harga) as "Produk Termurah" from barang;
++--------------------+
+| Produk Termurah    |
++--------------------+
+| 1238333.3333333333 |
++--------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select avg(harga) as "Rata Rataa" from barang;
++--------------------+
+| Rata Rataa         |
++--------------------+
+| 1238333.3333333333 |
++--------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select sum(harga) as "Harga Total" from barang;
++-------------+
+| Harga Total |
++-------------+
+|     7430000 |
++-------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select sum(harga) as harga_sum, max(harga) as harga_max, min(harga) as harga_min from barang;
++-----------+-----------+-----------+
+| harga_sum | harga_max | harga_min |
++-----------+-----------+-----------+
+|   7430000 |   5000000 |      5000 |
++-----------+-----------+-----------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select sum(harga) as "Harga Total", max(harga) as "Harga Maksimal", min(harga) as "Harga Minimal" from barang;
++-------------+----------------+---------------+
+| Harga Total | Harga Maksimal | Harga Minimal |
++-------------+----------------+---------------+
+|     7430000 |        5000000 |          5000 |
++-------------+----------------+---------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+---------+
+| id | kode | nama              | harga   | stok | idjenis |
++----+------+-------------------+---------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 |       4 |
++----+------+-------------------+---------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> alter table barang add column varchar(30) after stok;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'varchar(30) after stok' at line 1
+MariaDB [dbti02]> alter table barang add column foto varchar(30) after stok;
+Query OK, 0 rows affected (0.022 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+------+---------+
+| id | kode | nama              | harga   | stok | foto | idjenis |
++----+------+-------------------+---------+------+------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | NULL |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL |       4 |
++----+------+-------------------+---------+------+------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> update set foto='tv.jpg' whare id=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'set foto='tv.jpg' whare id=1' at line 1
+MariaDB [dbti02]> update barang set foto='tv.jpg' whare id=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'whare id=1' at line 1
+MariaDB [dbti02]> update barang set foto='tv.jpg' where id=1;
+Query OK, 1 row affected (0.011 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL   |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]>
