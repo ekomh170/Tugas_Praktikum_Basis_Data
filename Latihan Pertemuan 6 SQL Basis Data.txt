@@ -1,0 +1,502 @@
+########################################## - Pertemuan 6 Basis Data - ################################################ 
+
+Waktu Dengan Asdos
+
+PS C:\Users\Lenovo_Ideapad_G_3> mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 9
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpos                   |
+| dbpuskesmas             |
+| dbti02                  |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+12 rows in set (0.011 sec)
+
+MariaDB [(none)]> use dbti02
+Database changed
+MariaDB [dbti02]> show tables;
++------------------+
+| Tables_in_dbti02 |
++------------------+
+| barang           |
+| jenis            |
++------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> desc barang;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode    | char(5)     | NO   | UNI | NULL    |                |
+| nama    | varchar(30) | NO   |     | NULL    |                |
+| harga   | double      | NO   |     | NULL    |                |
+| stok    | int(11)     | NO   |     | NULL    |                |
+| foto    | varchar(30) | YES  |     | NULL    |                |
+| idjenis | int(11)     | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.013 sec)
+
+MariaDB [dbti02]> desc jenis;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.007 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL   |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+6 rows in set (0.006 sec)
+
+MariaDB [dbti02]> select * from barang where stok = (SELECT MAX(stok) FROM barang);
++----+------+--------+-------+------+------+---------+
+| id | kode | nama   | harga | stok | foto | idjenis |
++----+------+--------+-------+------+------+---------+
+|  6 | ET04 | Es Teh |  5000 |  120 | NULL |       4 |
++----+------+--------+-------+------+------+---------+
+1 row in set (0.005 sec)
+
+MariaDB [dbti02]> select nama, harga, stok from barang
+    -> where nama like '%meja%';
++--------------+--------+------+
+| nama         | harga  | stok |
++--------------+--------+------+
+| Meja Belajar | 400000 |   50 |
++--------------+--------+------+
+1 row in set (0.007 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL   |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select nama, barang, stok from barang;
+ERROR 1054 (42S22): Unknown column 'barang' in 'field list'
+MariaDB [dbti02]> select nama, harga, stok from barang;
++-------------------+---------+------+
+| nama              | harga   | stok |
++-------------------+---------+------+
+| TV SHARP 60 INCH  | 2000000 |   10 |
+| AC Panasonic 2 PK | 5000000 |   10 |
+| Meja Belajar      |  400000 |   50 |
+| Ayam Geprek       |   15000 |  100 |
+| Es Teh            |    5000 |  120 |
+| Kopi Pahit        |   10000 |   50 |
++-------------------+---------+------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select nama,harga,stok,
+    -> case
+    -> when stok >= 5 then 'Cukup'
+    -> else 'Kurang'
+    -> END AS keterangan
+    -> from barang;
++-------------------+---------+------+------------+
+| nama              | harga   | stok | keterangan |
++-------------------+---------+------+------------+
+| TV SHARP 60 INCH  | 2000000 |   10 | Cukup      |
+| AC Panasonic 2 PK | 5000000 |   10 | Cukup      |
+| Meja Belajar      |  400000 |   50 | Cukup      |
+| Ayam Geprek       |   15000 |  100 | Cukup      |
+| Es Teh            |    5000 |  120 | Cukup      |
+| Kopi Pahit        |   10000 |   50 | Cukup      |
++-------------------+---------+------+------------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select nama,
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> when idjenis = 4 then 'Minuman'
+    -> else '-'
+    -> end as kategori,harga, stok, from barang;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'from barang' at line 8
+MariaDB [dbti02]> select nama,
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> when idjenis = 4 then 'Minuman'
+    -> else '-'
+    -> end as kategori from barang;
++-------------------+------------+
+| nama              | kategori   |
++-------------------+------------+
+| TV SHARP 60 INCH  | Elektronik |
+| AC Panasonic 2 PK | Elektronik |
+| Meja Belajar      | Furniture  |
+| Ayam Geprek       | Makanan    |
+| Es Teh            | Minuman    |
+| Kopi Pahit        | Minuman    |
++-------------------+------------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> -- klausa Group By Materi
+MariaDB [dbti02]> -- klausa Group By Materi
+MariaDB [dbti02]> SELECT
+    -> CASE
+    -> WHEN idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> when idjenis = 4 then 'Minuman'
+    -> else '-'
+    -> END AS kategori, SUM(stok) AS total_stok from barang group by kategori;
++------------+------------+
+| kategori   | total_stok |
++------------+------------+
+| Elektronik |         20 |
+| Furniture  |         50 |
+| Makanan    |        100 |
+| Minuman    |        170 |
++------------+------------+
+4 rows in set (0.007 sec)
+
+MariaDB [dbti02]> -- klausa having sql
+MariaDB [dbti02]> -- klausa having sql
+MariaDB [dbti02]> -- klausa having sql
+MariaDB [dbti02]> select
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> when idjenis = 4 then 'Minuman'
+    -> else '-'
+    -> end as kategori, sum(stok) as total_stok from barang group by kategori;
++------------+------------+
+| kategori   | total_stok |
++------------+------------+
+| Elektronik |         20 |
+| Furniture  |         50 |
+| Makanan    |        100 |
+| Minuman    |        170 |
++------------+------------+
+4 rows in set (0.001 sec)
+
+
+
+=============================== Praktikum 6 Dengan Asdos
+
+MariaDB [dbti02]> -- Sub Query
+MariaDB [dbti02]> -- Sub Query
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL   |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where stok = (SELECT MAX(stok) from barang);
++----+------+--------+-------+------+------+---------+
+| id | kode | nama   | harga | stok | foto | idjenis |
++----+------+--------+-------+------+------+---------+
+|  6 | ET04 | Es Teh |  5000 |  120 | NULL |       4 |
++----+------+--------+-------+------+------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga = (SELECT MAX(stok) from barang);
+Empty set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where harga = (SELECT MAX(harga) from barang);
++----+------+-------------------+---------+------+------+---------+
+| id | kode | nama              | harga   | stok | foto | idjenis |
++----+------+-------------------+---------+------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL |       1 |
++----+------+-------------------+---------+------+------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [dbti02]> -- Like
+MariaDB [dbti02]> -- Like
+MariaDB [dbti02]> select * from barang where nama like '%a';
+Empty set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where nama like 'a%';
++----+------+-------------------+---------+------+------+---------+
+| id | kode | nama              | harga   | stok | foto | idjenis |
++----+------+-------------------+---------+------+------+---------+
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL |       1 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL |       3 |
++----+------+-------------------+---------+------+------+---------+
+2 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '%a%';
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '%e%';
++----+------+--------------+--------+------+------+---------+
+| id | kode | nama         | harga  | stok | foto | idjenis |
++----+------+--------------+--------+------+------+---------+
+|  3 | MJ02 | Meja Belajar | 400000 |   50 | NULL |       2 |
+|  4 | AG03 | Ayam Geprek  |  15000 |  100 | NULL |       3 |
+|  6 | ET04 | Es Teh       |   5000 |  120 | NULL |       4 |
++----+------+--------------+--------+------+------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '___a';
+Empty set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_c';
+Empty set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '________p';
+Empty set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_______p';
+Empty set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_______p%';
++----+------+------------------+---------+------+--------+---------+
+| id | kode | nama             | harga   | stok | foto   | idjenis |
++----+------+------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg |       1 |
+|  4 | AG03 | Ayam Geprek      |   15000 |  100 | NULL   |       3 |
++----+------+------------------+---------+------+--------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '________p%';
+Empty set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_______p%';
++----+------+------------------+---------+------+--------+---------+
+| id | kode | nama             | harga   | stok | foto   | idjenis |
++----+------+------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg |       1 |
+|  4 | AG03 | Ayam Geprek      |   15000 |  100 | NULL   |       3 |
++----+------+------------------+---------+------+--------+---------+
+2 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '%_______p';
+Empty set (0.000 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_______p%';
++----+------+------------------+---------+------+--------+---------+
+| id | kode | nama             | harga   | stok | foto   | idjenis |
++----+------+------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg |       1 |
+|  4 | AG03 | Ayam Geprek      |   15000 |  100 | NULL   |       3 |
++----+------+------------------+---------+------+--------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang where nama like '_______p%';
++----+------+------------------+---------+------+--------+---------+
+| id | kode | nama             | harga   | stok | foto   | idjenis |
++----+------+------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg |       1 |
+|  4 | AG03 | Ayam Geprek      |   15000 |  100 | NULL   |       3 |
++----+------+------------------+---------+------+--------+---------+
+2 rows in set (0.000 sec)
+
+MariaDB [dbti02]> -- Distinct
+MariaDB [dbti02]> -- Distinct
+MariaDB [dbti02]> -- Distinct
+MariaDB [dbti02]> select distinct stok from barang;
++------+
+| stok |
++------+
+|   10 |
+|   50 |
+|  100 |
+|  120 |
++------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from barang;
++----+------+-------------------+---------+------+--------+---------+
+| id | kode | nama              | harga   | stok | foto   | idjenis |
++----+------+-------------------+---------+------+--------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | NULL   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   50 | NULL   |       2 |
+|  4 | AG03 | Ayam Geprek       |   15000 |  100 | NULL   |       3 |
+|  6 | ET04 | Es Teh            |    5000 |  120 | NULL   |       4 |
+|  7 | KO11 | Kopi Pahit        |   10000 |   50 | NULL   |       4 |
++----+------+-------------------+---------+------+--------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02]> select distinct stok from barang;
++------+
+| stok |
++------+
+|   10 |
+|   50 |
+|  100 |
+|  120 |
++------+
+4 rows in set (0.000 sec)
+
+MariaDB [dbti02]> -- Case
+MariaDB [dbti02]> -- Case
+MariaDB [dbti02]> -- Case
+MariaDB [dbti02]> SELECT nama,harga,barang,
+    -> case
+    -> whem stok <= then 'Kurang'
+    -> ;
+MariaDB [dbti02]> SELECT nama, harga, stok,
+    ->   CASE
+    ->     WHEN stok <= 10 THEN 'Kurang'
+    ->     WHEN stok >= 11 AND stok <= 100 THEN 'Cukup'
+    ->     ELSE 'Lebih'
+    ->   END AS status_stok
+    -> FROM barang;
++-------------------+---------+------+-------------+
+| nama              | harga   | stok | status_stok |
++-------------------+---------+------+-------------+
+| TV SHARP 60 INCH  | 2000000 |   10 | Kurang      |
+| AC Panasonic 2 PK | 5000000 |   10 | Kurang      |
+| Meja Belajar      |  400000 |   50 | Cukup       |
+| Ayam Geprek       |   15000 |  100 | Cukup       |
+| Es Teh            |    5000 |  120 | Lebih       |
+| Kopi Pahit        |   10000 |   50 | Cukup       |
++-------------------+---------+------+-------------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> -- klause group by
+MariaDB [dbti02]> -- klause group by
+MariaDB [dbti02]> select idjenis, sum(harga) as jml from barang group by nama;
++---------+---------+
+| idjenis | jml     |
++---------+---------+
+|       1 | 5000000 |
+|       3 |   15000 |
+|       4 |    5000 |
+|       4 |   10000 |
+|       2 |  400000 |
+|       1 | 2000000 |
++---------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select idjenis, sum(harga) as jml from barang group by idjenis;
++---------+---------+
+| idjenis | jml     |
++---------+---------+
+|       1 | 7000000 |
+|       2 |  400000 |
+|       3 |   15000 |
+|       4 |   15000 |
++---------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select * from jenis;
++----+------------+
+| id | nama       |
++----+------------+
+|  1 | Elektronik |
+|  2 | Furniture  |
+|  3 | Makanan    |
+|  4 | Minuman    |
++----+------------+
+4 rows in set (0.007 sec)
+
+MariaDB [dbti02]> select
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> else 'Minuman'
+    -> end as kategori,
+    -> sum(stok) as total_stok from barang group by kategori;
++------------+------------+
+| kategori   | total_stok |
++------------+------------+
+| Elektronik |         20 |
+| Furniture  |         50 |
+| Makanan    |        100 |
+| Minuman    |        170 |
++------------+------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> sum(harga) as jml from barang group by idjenis;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'sum(harga) as jml from barang group by idjenis' at line 1
+MariaDB [dbti02]> select
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> else 'Minuman'
+    -> end as kategori,
+    -> sum(harga) as jml from barang group by idjenis;
++------------+---------+
+| kategori   | jml     |
++------------+---------+
+| Elektronik | 7000000 |
+| Furniture  |  400000 |
+| Makanan    |   15000 |
+| Minuman    |   15000 |
++------------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02]> select
+    -> case
+    -> when idjenis = 1 then 'Elektronik'
+    -> when idjenis = 2 then 'Furniture'
+    -> when idjenis = 3 then 'Makanan'
+    -> else 'Minuman'
+    -> end as kategori,
+    -> sum(harga) as jml from barang group by idjenis having sum(harga) >=20000;
++------------+---------+
+| kategori   | jml     |
++------------+---------+
+| Elektronik | 7000000 |
+| Furniture  |  400000 |
++------------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbti02]>
+
+
+
+
+
