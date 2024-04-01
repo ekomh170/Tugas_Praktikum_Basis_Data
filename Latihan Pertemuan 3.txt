@@ -1,0 +1,143 @@
+PS C:\Users\Lenovo_Ideapad_G_3> mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> -- Latihan Pertemuan 3 --
+MariaDB [(none)]> -- Latihan Pertemuan 3 --
+MariaDB [(none)]> SHOW DATABASES;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpos                   |
+| dbpuskesmas             |
+| dbti02                  |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+12 rows in set (0.013 sec)
+
+MariaDB [(none)]> CREATE DATABASE dbti02_test
+    -> ;
+Query OK, 1 row affected (0.012 sec)
+
+MariaDB [(none)]> SHOW DATABASES;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpos                   |
+| dbpuskesmas             |
+| dbti02                  |
+| dbti02_test             |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+13 rows in set (0.001 sec)
+
+MariaDB [(none)]> CREATE TABLE jenis(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null unique);
+ERROR 1046 (3D000): No database selected
+MariaDB [(none)]> use dbti02_test
+Database changed
+
+MariaDB [dbti02_test]> CREATE TABLE jenis(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null unique);
+Query OK, 0 rows affected (0.021 sec)
+
+MariaDB [dbti02_test]> desc jenis;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.012 sec)
+
+MariaDB [dbti02_test]> CREATE TABLE barang(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null,
+    -> harga double not null,
+    -> stok int not null,
+    -> idjenis int not null references jenis(id),
+    -> foto varchar(30));
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [dbti02_test]> desc barang;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama    | varchar(30) | NO   |     | NULL    |                |
+| harga   | double      | NO   |     | NULL    |                |
+| stok    | int(11)     | NO   |     | NULL    |                |
+| idjenis | int(11)     | NO   |     | NULL    |                |
+| foto    | varchar(30) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+6 rows in set (0.005 sec)
+
+MariaDB [dbti02_test]> -- ALTER Pertemuan 3 --
+MariaDB [dbti02_test]> -- ALTER Pertemuan 3 --
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> DROP COLUMN foto;
+Query OK, 0 rows affected (0.015 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> desc barang;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama    | varchar(30) | NO   |     | NULL    |                |
+| harga   | double      | NO   |     | NULL    |                |
+| stok    | int(11)     | NO   |     | NULL    |                |
+| idjenis | int(11)     | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+5 rows in set (0.005 sec)
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> ADD COLUMN IF NOT EXISTS
+    -> foto varchar(30) AFTER stok;
+Query OK, 0 rows affected (0.014 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> desc barang;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama    | varchar(30) | NO   |     | NULL    |                |
+| harga   | double      | NO   |     | NULL    |                |
+| stok    | int(11)     | NO   |     | NULL    |                |
+| foto    | varchar(30) | YES  |     | NULL    |                |
+| idjenis | int(11)     | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+6 rows in set (0.011 sec)
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> CHANGE nama nama_produk varchar(30) not null unique;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> -- Latihan Pertemuan 3 --
+MariaDB [dbti02_test]> -- Latihan Pertemuan 3 --
