@@ -1,0 +1,227 @@
+PS C:\Users\Lenovo_Ideapad_G_3> mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 66
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> -- Latihan Pertemuan 4 --
+MariaDB [(none)]> -- Latihan Pertemuan 4 --
+MariaDB [(none)]> SHOW DATABASES;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpos                   |
+| dbpuskesmas             |
+| dbti02                  |
+| dbti02_test             |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+13 rows in set (0.001 sec)
+
+MariaDB [(none)]> USE dbti02_test
+Database changed
+MariaDB [dbti02_test]> select * from jenis;
+Empty set (0.000 sec)
+
+MariaDB [dbti02_test]> desc jenis;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.010 sec)
+
+MariaDB [dbti02_test]> INSERT INTO jenis VALUES
+    -> ('', 'Elektronik'),
+    -> ('', 'Furniture'),
+    -> ('', 'Makanan'),
+    -> ('', 'Minuman');
+Query OK, 4 rows affected, 4 warnings (0.008 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+MariaDB [dbti02_test]> SELECT * FROM jenis;
++----+------------+
+| id | nama       |
++----+------------+
+|  1 | Elektronik |
+|  2 | Furniture  |
+|  3 | Makanan    |
+|  4 | Minuman    |
++----+------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbti02_test]> select * from barang;
+Empty set (0.001 sec)
+
+MariaDB [dbti02_test]> select * from barang;
+Empty set (0.001 sec)
+
+MariaDB [dbti02_test]> desc barang;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama_produk | varchar(30) | NO   | UNI | NULL    |                |
+| harga       | double      | NO   |     | NULL    |                |
+| stok        | int(11)     | NO   |     | NULL    |                |
+| foto        | varchar(30) | YES  |     | NULL    |                |
+| idjenis     | int(11)     | NO   |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.010 sec)
+
+MariaDB [dbti02_test]> INSERT INTO barang
+    -> (nama_produk, harga, stok, foto, idjenis) VALUES
+    -> ('TV SHARP 60 INCH', 2000000, 10, 'tv.jpg', 1),
+    -> ('AC Panasonic 2 PK', 5000000, 10, 'ac.jpg', 1),
+    -> ('Meja Belajar', 400000, 40, 'meja.jpg', 2);
+Query OK, 3 rows affected (0.008 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+-------------------+---------+------+----------+---------+
+| id | nama_produk       | harga   | stok | foto     | idjenis |
++----+-------------------+---------+------+----------+---------+
+|  1 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg   |       1 |
+|  2 | AC Panasonic 2 PK | 5000000 |   10 | ac.jpg   |       1 |
+|  3 | Meja Belajar      |  400000 |   40 | meja.jpg |       2 |
++----+-------------------+---------+------+----------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbti02_test]>
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> ADD COLUMN IF NOT EXISTS
+    -> kode char(5) AFTER ID
+    -> ;
+Query OK, 0 rows affected (0.009 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> desc barang;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode        | char(5)     | YES  |     | NULL    |                |
+| nama_produk | varchar(30) | NO   | UNI | NULL    |                |
+| harga       | double      | NO   |     | NULL    |                |
+| stok        | int(11)     | NO   |     | NULL    |                |
+| foto        | varchar(30) | YES  |     | NULL    |                |
+| idjenis     | int(11)     | NO   |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+7 rows in set (0.005 sec)
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> CHANGE nama nama_produk varchar(30) not null unique;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+ADD COLUMN kode varchar(30) AFTER id;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+-------------------+---------+------+----------+---------+
+| id | kode | nama              | harga   | stok | foto     | idjenis |
++----+------+-------------------+---------+------+----------+---------+
+|  1 |      | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg   |       1 |
+|  2 |      | AC Panasonic 2 PK | 5000000 |   10 | ac.jpg   |       1 |
+|  3 |      | Meja Belajar      |  400000 |   40 | meja.jpg |       2 |
++----+------+-------------------+---------+------+----------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> update barang
+    -> set kode = 'TV01'
+    -> WHERE id = 1;
+Query OK, 1 row affected (0.012 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+-------------------+---------+------+----------+---------+
+| id | kode | nama              | harga   | stok | foto     | idjenis |
++----+------+-------------------+---------+------+----------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg   |       1 |
+|  2 |      | AC Panasonic 2 PK | 5000000 |   10 | ac.jpg   |       1 |
+|  3 |      | Meja Belajar      |  400000 |   40 | meja.jpg |       2 |
++----+------+-------------------+---------+------+----------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> update barang
+    -> set kode = 'AC01'
+    -> WHERE id = 2;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+-------------------+---------+------+----------+---------+
+| id | kode | nama              | harga   | stok | foto     | idjenis |
++----+------+-------------------+---------+------+----------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg   |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | ac.jpg   |       1 |
+|  3 |      | Meja Belajar      |  400000 |   40 | meja.jpg |       2 |
++----+------+-------------------+---------+------+----------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> update barang
+    -> set kode = 'MJ02'
+    -> WHERE id = 3;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+-------------------+---------+------+----------+---------+
+| id | kode | nama              | harga   | stok | foto     | idjenis |
++----+------+-------------------+---------+------+----------+---------+
+|  1 | TV01 | TV SHARP 60 INCH  | 2000000 |   10 | tv.jpg   |       1 |
+|  2 | AC01 | AC Panasonic 2 PK | 5000000 |   10 | ac.jpg   |       1 |
+|  3 | MJ02 | Meja Belajar      |  400000 |   40 | meja.jpg |       2 |
++----+------+-------------------+---------+------+----------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> DELETE FROM barang WHERE id = 2;
+Query OK, 1 row affected (0.008 sec)
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+------------------+---------+------+----------+---------+
+| id | kode | nama             | harga   | stok | foto     | idjenis |
++----+------+------------------+---------+------+----------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg   |       1 |
+|  3 | MJ02 | Meja Belajar     |  400000 |   40 | meja.jpg |       2 |
++----+------+------------------+---------+------+----------+---------+
+2 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> INSERT INTO `barang` (`kode`, `nama`, `harga`, `stok`, `foto`, `idjenis`) VALUES
+    -> ('AC01', 'AC Panasonic 2 PK', 5000000, 10, NULL, 1),
+    -> ('AG03', 'Ayam Geprek', 15000, 100, NULL, 3),
+    -> ('ET04', 'Es Teh', 5000, 120, NULL, 4),
+    -> ('KO11', 'Kopi Pahit', 10000, 50, NULL, 4);
+Query OK, 4 rows affected (0.008 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> select * from barang;
++----+------+------------------+---------+------+----------+---------+
+| id | kode | nama             | harga   | stok | foto     | idjenis |
++----+------+------------------+---------+------+----------+---------+
+|  1 | TV01 | TV SHARP 60 INCH | 2000000 |   10 | tv.jpg   |       1 |
+|  3 | MJ02 | Meja Belajar     |  400000 |   40 | meja.jpg |       2 |
+|  4 | AC01 | AC Panasonic 2 PK| 5000000 |   10 | NULL     |       1 |
+|  5 | AG03 | Ayam Geprek      |   15000 |  100 | NULL     |       3 |
+|  6 | ET04 | Es Teh           |    5000 |  120 | NULL     |       4 |
+|  7 | KO11 | Kopi Pahit       |   10000 |   50 | NULL     |       4 |
++----+------+------------------+---------+------+----------+---------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbti02_test]> select * from barang;

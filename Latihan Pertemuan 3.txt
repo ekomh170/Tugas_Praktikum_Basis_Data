@@ -139,5 +139,15 @@ MariaDB [dbti02_test]> ALTER TABLE barang
 Query OK, 0 rows affected (0.018 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 
+MariaDB [dbti02_test]> ALTER TABLE barang
+    -> CHANGE nama nama_produk varchar(30) not null unique;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbti02_test]> ALTER TABLE barang
+ADD COLUMN kode varchar(30) AFTER id;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
 MariaDB [dbti02_test]> -- Latihan Pertemuan 3 --
 MariaDB [dbti02_test]> -- Latihan Pertemuan 3 --
