@@ -23,7 +23,7 @@ Repository ini dibuat untuk menyimpan kumpulan tugas dan praktikum yang berkaita
 ### Daftar Praktikum:
 
 
-1. [Praktikum 01 - Perkenalan Asdos & Dosen](#)
+1. [Praktikum 01 - Perkenalan Asdos & Dosen](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/Tugas1_0110223079_Eko-Muchamad-Haryono_TI02.txt)
 
 2. [Praktikum 02 - Instalasi XAMPP](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/Latihan%20Pertemuan%202%20-%20Instalasi%20XAMPP.png)
 
