@@ -1,0 +1,812 @@
+Setting environment for using XAMPP for Windows.
+Lenovo_Ideapad_G_3@DESKTOP-O9PDGKL c:\Xampp\xampp8.2.12
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++-------------------------+
+| Database                |
++-------------------------+
+| aryo                    |
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpos                   |
+| dbpuskesmas             |
+| dbpuskesmas_praktikum_6 |
+| dbti02                  |
+| dbti02_test             |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+15 rows in set (0.016 sec)
+
+MariaDB [(none)]> CREATE DATABASE dbpegawai
+    -> ;
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [(none)]> show databases;
++-------------------------+
+| Database                |
++-------------------------+
+| aryo                    |
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_toko_online          |
+| dbpegawai               |
+| dbpos                   |
+| dbpuskesmas             |
+| dbpuskesmas_praktikum_6 |
+| dbti02                  |
+| dbti02_test             |
+| dbtoko                  |
+| information_schema      |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+16 rows in set (0.001 sec)
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+MariaDB [dbpegawai]> CREATE TABLE divisi (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE
+    -> );
+Query OK, 0 rows affected (0.020 sec)
+
+MariaDB [dbpegawai]> desc divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.014 sec)
+
+MariaDB [dbpegawai]> CREATE TABLE jabatan (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.021 sec)
+
+MariaDB [dbpegawai]> desc jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.013 sec)
+
+MariaDB [dbpegawai]> CREATE TABLE pegawai (
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nip CHAR(5) NOT NULL UNIQUE,
+    -> nama VARCHAR(30) NOT NULL,
+    -> gender ENUM('Laki-Laki', 'Perempuan') NOT NULL,
+    -> tmp_lahir VARCHAR(30) NOT NULL,
+    -> tgl_lahir DATE NOT NULL,
+    -> iddivisi INT NOT NULL,
+    -> idjabatan INT NOT NULL,
+    -> alamat TEXT,
+    -> FOREIGN KEY (iddivisi) REFERENCES divisi(id),
+    -> FOREIGN KEY (idjabatan) REFERENCES jabatan(id));
+Query OK, 0 rows affected (0.023 sec)
+
+MariaDB [dbpegawai]> SHOW TABLES
+    -> ;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> INSERT INTO divisi (nama) VALUES ('SDM'), ('Keuangan'), ('Marketing'), ('IT');
+Query OK, 4 rows affected (0.021 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.002 sec)
+
+MariaDB [dbpegawai]> INSERT INTO jabatan (nama) VALUES
+    -> ('Direktur'),
+    -> ('Manajer'),
+    -> ('Asisten Manajer'),
+    -> ('Staff');
+Query OK, 4 rows affected (0.008 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  3 | Asisten Manajer |
+|  1 | Direktur        |
+|  2 | Manajer         |
+|  4 | Staff           |
++----+-----------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> -- Memasukkan 20 pegawai dengan gender dan jabatan diacak, memastikan validasi untuk gender dan jabatan
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat) VALUES
+    -> ('00001', 'Eko Muchamad Haryono', 'Laki-Laki', 'Bogor', '2003-03-29', 4, 1, 'Jl. Puspanegara No. 25, Depok'),
+    -> ('00012', 'Putri Anggraeni', 'Perempuan', 'Solo', '1995-12-03', 4, 4, 'Jl. Slamet Riyadi No. 14, Solo'),
+    -> ('00018', 'Siti Hidayah', 'Perempuan', 'Pekanbaru', '1990-06-25', 4, 2, 'Jl. Sudirman No. 16, Pekanbaru'),
+    -> ('00009', 'Taufik Ridwan', 'Laki-Laki', 'Samarinda', '1986-08-19', 4, 3, 'Jl. Gajah Mada No. 17, Samarinda'),
+    -> ('00020', 'Uci Nurhayati', 'Perempuan', 'Banjarmasin', '1993-10-08', 4, 2, 'Jl. A Yani No. 18, Banjarmasin');
+Query OK, 5 rows affected (0.004 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat) VALUES
+    -> ('00010', 'Kartika Sari', 'Perempuan', 'Tangerang', '1989-11-28', 3, 1, 'Jl. Gatot Subroto No. 9, Tangerang'),
+    -> ('00017', 'Lukman Hakim', 'Laki-Laki', 'Pontianak', '1993-02-14', 3, 3, 'Jl. Sutoyo No. 10, Pontianak'),
+    -> ('00003', 'Marssela Fitriani', 'Perempuan', 'Batam', '1992-05-20', 3, 4, 'Jl. Hang Tuah No. 11, Batam'),
+    -> ('00014', 'Nina Sari', 'Perempuan', 'Malang', '1988-07-07', 3, 2, 'Jl. Diponegoro No. 12, Malang'),
+    -> ('00006', 'Oscar Putra Santoso', 'Laki-Laki', 'Manado', '1994-09-15', 3, 1, 'Jl. Sam Ratulangi No. 13, Manado');
+Query OK, 5 rows affected (0.009 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat) VALUES
+    -> ('00015', 'Fauzan Muhammad Rahman', 'Laki-Laki', 'Medan', '1991-04-18', 2, 2, 'Jl. Sisingamangaraja No. 2, Medan'),
+    -> ('00007', 'Gita Suryani', 'Perempuan', 'Palembang', '1994-10-30', 2, 4, 'Jl. Angkatan 45 No. 3, Palembang'),
+    -> ('00008', 'Hendra Gunawan', 'Laki-Laki', 'Makassar', '1987-08-12', 2, 3, 'Jl. Urip Sumoharjo No. 6, Makassar'),
+    -> ('00019', 'Indah Permata', 'Perempuan', 'Balikpapan', '1996-06-22', 2, 1, 'Jl. Sudirman No. 7, Balikpapan'),
+    -> ('00011', 'Muhammad Joko Susanto', 'Laki-Laki', 'Denpasar', '1990-01-08', 2, 4, 'Jl. Hayam Wuruk No. 8, Denpasar');
+Query OK, 5 rows affected (0.002 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, iddivisi, idjabatan, alamat) VALUES
+    -> ('00016', 'Ani Wati', 'Perempuan', 'Jakarta', '1990-05-15', 1, 1, 'Jl. Mangga Besar No. 1, Jakarta'),
+    -> ('00013', 'Muhammad Budi Santoso', 'Laki-Laki', 'Surabaya', '1992-07-20', 1, 2, 'Jl. Darmo No. 5, Surabaya'),
+    -> ('00002', 'Citra  Dewi', 'Perempuan', 'Bandung', '1988-12-10', 1, 3, 'Jl. Cihampelas No. 10, Bandung'),
+    -> ('00005', 'Dedi Kurniawan', 'Laki-Laki', 'Yogyakarta', '1995-03-25', 1, 4, 'Jl. Malioboro No. 15, Yogyakarta'),
+    -> ('00004', 'Endah Sari', 'Perempuan', 'Semarang', '1993-09-05', 1, 3, 'Jl. Pemuda No. 20, Semarang');
+Query OK, 5 rows affected (0.008 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+------------------------+-----------+-------------+------------+----------+-----------+------------------------------------+
+| id | nip   | nama                   | gender    | tmp_lahir   | tgl_lahir  | iddivisi | idjabatan | alamat                             |
++----+-------+------------------------+-----------+-------------+------------+----------+-----------+------------------------------------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor       | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Solo        | 1995-12-03 |        4 |         4 | Jl. Slamet Riyadi No. 14, Solo     |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Pekanbaru   | 1990-06-25 |        4 |         2 | Jl. Sudirman No. 16, Pekanbaru     |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Samarinda   | 1986-08-19 |        4 |         3 | Jl. Gajah Mada No. 17, Samarinda   |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Banjarmasin | 1993-10-08 |        4 |         2 | Jl. A Yani No. 18, Banjarmasin     |
+|  6 | 00010 | Kartika Sari           | Perempuan | Tangerang   | 1989-11-28 |        3 |         1 | Jl. Gatot Subroto No. 9, Tangerang |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak   | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam       | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang      | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado      | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan       | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang   | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar    | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan  | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar    | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta     | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya    | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung     | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |
+| 19 | 00005 | Dedi Kurniawan         | Laki-Laki | Yogyakarta  | 1995-03-25 |        1 |         4 | Jl. Malioboro No. 15, Yogyakarta   |
+| 20 | 00004 | Endah Sari             | Perempuan | Semarang    | 1993-09-05 |        1 |         3 | Jl. Pemuda No. 20, Semarang        |
++----+-------+------------------------+-----------+-------------+------------+----------+-----------+------------------------------------+
+20 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Jakarta', tgl_lahir = '1995-01-01', alamat = 'Jl. Thamrin No. 10, Jakarta'
+    -> WHERE id = 2;
+Query OK, 1 row affected (0.009 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Bandung', tgl_lahir = '1994-02-02', alamat = 'Jl. Ciumbuleuit No. 20, Bandung'
+    -> WHERE id = 3;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Surabaya', tgl_lahir = '1993-03-03', alamat = 'Jl. Raya Surabaya No. 30, Surabaya'
+    -> WHERE id = 4;
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Yogyakarta', tgl_lahir = '1992-04-04', alamat = 'Jl. Magelang No. 40, Yogyakarta'
+    -> WHERE id = 5;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]>
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Semarang', tgl_lahir = '1991-05-05', alamat = 'Jl. Pahlawan No. 50, Semarang'
+    -> WHERE id = 6;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+| id | nip   | nama                   | gender    | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |
+|  6 | 00010 | Kartika Sari           | Perempuan | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |
+| 19 | 00005 | Dedi Kurniawan         | Laki-Laki | Yogyakarta | 1995-03-25 |        1 |         4 | Jl. Malioboro No. 15, Yogyakarta   |
+| 20 | 00004 | Endah Sari             | Perempuan | Semarang   | 1993-09-05 |        1 |         3 | Jl. Pemuda No. 20, Semarang        |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+
+MariaDB [dbpegawai]> DELETE FROM pegawai
+    -> ORDER BY id DESC
+    -> LIMIT 2;
+Query OK, 2 rows affected (0.008 sec)
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+| id | nip   | nama                   | gender    | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |
+|  6 | 00010 | Kartika Sari           | Perempuan | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+
+18 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.013 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+| id | nip   | nama                   | gender    | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |           0 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |           0 |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |           0 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |           0 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |           0 |
+|  6 | 00010 | Kartika Sari           | Perempuan | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |           0 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |           0 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |           0 |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |           0 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |           0 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |           0 |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |           0 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |           0 |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |           0 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |           0 |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |           0 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |           0 |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |           0 |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET berat_badan = ROUND(RAND() * (100 - 50) + 50, 2);
+Query OK, 18 rows affected (0.008 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+| id | nip   | nama                   | gender    | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |
+|  6 | 00010 | Kartika Sari           | Perempuan | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |       52.99 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |       66.97 |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+
+18 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN umur INT NOT NULL;
+Query OK, 0 rows affected (0.007 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET umur = YEAR(CURRENT_DATE()) - YEAR(tgl_lahir) - (DATE_FORMAT(CURRENT_DATE(), '%m%d') < DATE_FORMAT(tgl_lahir, '%m%d'));
+Query OK, 18 rows affected (0.003 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | gender    | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah           | Perempuan | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |   30 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
+|  6 | 00010 | Kartika Sari           | Perempuan | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |   32 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |   31 |
+|  9 | 00014 | Nina Sari              | Perempuan | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |   35 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 12 | 00007 | Gita Suryani           | Perempuan | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |   29 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 14 | 00019 | Indah Permata          | Perempuan | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |   27 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+| 16 | 00016 | Ani Wati               | Perempuan | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |       52.99 |   33 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
+| 18 | 00002 | Citra  Dewi            | Perempuan | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |       66.97 |   35 |
++----+-------+------------------------+-----------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> CHANGE COLUMN gender jenis_kelamin VARCHAR(255);
+Query OK, 18 rows affected (0.046 sec)
+Records: 18  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki     | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah           | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |   30 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki     | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
+|  6 | 00010 | Kartika Sari           | Perempuan     | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |   32 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki     | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan     | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |   31 |
+|  9 | 00014 | Nina Sari              | Perempuan     | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |   35 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki     | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 12 | 00007 | Gita Suryani           | Perempuan     | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |   29 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki     | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 14 | 00019 | Indah Permata          | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |   27 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki     | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+| 16 | 00016 | Ani Wati               | Perempuan     | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |       52.99 |   33 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki     | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
+| 18 | 00002 | Citra  Dewi            | Perempuan     | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |       66.97 |   35 |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat
+    -> FROM pegawai;
++-------+------------------------+---------------+------------------------------------+
+| nip   | nama                   | jenis_kelamin | alamat                             |
++-------+------------------------+---------------+------------------------------------+
+| 00001 | Eko Muchamad Haryono   | Laki-Laki     | Jl. Puspanegara No. 25, Depok      |
+| 00012 | Putri Anggraeni        | Perempuan     | Jl. Thamrin No. 10, Jakarta        |
+| 00018 | Siti Hidayah           | Perempuan     | Jl. Ciumbuleuit No. 20, Bandung    |
+| 00009 | Taufik Ridwan          | Laki-Laki     | Jl. Raya Surabaya No. 30, Surabaya |
+| 00020 | Uci Nurhayati          | Perempuan     | Jl. Magelang No. 40, Yogyakarta    |
+| 00010 | Kartika Sari           | Perempuan     | Jl. Pahlawan No. 50, Semarang      |
+| 00017 | Lukman Hakim           | Laki-Laki     | Jl. Sutoyo No. 10, Pontianak       |
+| 00003 | Marssela Fitriani      | Perempuan     | Jl. Hang Tuah No. 11, Batam        |
+| 00014 | Nina Sari              | Perempuan     | Jl. Diponegoro No. 12, Malang      |
+| 00006 | Oscar Putra Santoso    | Laki-Laki     | Jl. Sam Ratulangi No. 13, Manado   |
+| 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Jl. Sisingamangaraja No. 2, Medan  |
+| 00007 | Gita Suryani           | Perempuan     | Jl. Angkatan 45 No. 3, Palembang   |
+| 00008 | Hendra Gunawan         | Laki-Laki     | Jl. Urip Sumoharjo No. 6, Makassar |
+| 00019 | Indah Permata          | Perempuan     | Jl. Sudirman No. 7, Balikpapan     |
+| 00011 | Muhammad Joko Susanto  | Laki-Laki     | Jl. Hayam Wuruk No. 8, Denpasar    |
+| 00016 | Ani Wati               | Perempuan     | Jl. Mangga Besar No. 1, Jakarta    |
+| 00013 | Muhammad Budi Santoso  | Laki-Laki     | Jl. Darmo No. 5, Surabaya          |
+| 00002 | Citra  Dewi            | Perempuan     | Jl. Cihampelas No. 10, Bandung     |
++-------+------------------------+---------------+------------------------------------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin = 'Laki-Laki';
++----+-------+------------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki     | Bogor     | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki     | Surabaya  | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki     | Pontianak | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki     | Manado    | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Medan     | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki     | Makassar  | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki     | Denpasar  | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki     | Surabaya  | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
++----+-------+------------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+8 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE iddivisi = 4 AND jenis_kelamin = 'Perempuan';
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                          | berat_badan | umur |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+|  2 | 00012 | Putri Anggraeni | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta     |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah    | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung |       74.53 |   30 |
+|  5 | 00020 | Uci Nurhayati   | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta |       54.86 |   31 |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE umur > 30 AND tmp_lahir = 'Jakarta';
++----+-------+----------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+| id | nip   | nama     | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                          | berat_badan | umur |
++----+-------+----------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+| 16 | 00016 | Ani Wati | Perempuan     | Jakarta   | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta |       52.99 |   33 |
++----+-------+----------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE iddivisi = 3 AND umur > 30 AND jenis_kelamin = 'Perempuan';
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                        | berat_badan | umur |
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+|  6 | 00010 | Kartika Sari      | Perempuan     | Semarang  | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang |       87.23 |   32 |
+|  8 | 00003 | Marssela Fitriani | Perempuan     | Batam     | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam   |       96.18 |   31 |
+|  9 | 00014 | Nina Sari         | Perempuan     | Malang    | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang |        66.2 |   35 |
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip = '00001';
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+| id | nip   | nama                 | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                        | berat_badan | umur |
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono | Laki-Laki     | Bogor     | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok |       79.02 |   21 |
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin = 'Perempuan';
++----+-------+-------------------+---------------+------------+------------+----------+-----------+----------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                           | berat_badan | umur |
++----+-------+-------------------+---------------+------------+------------+----------+-----------+----------------------------------+-------------+------+
+|  2 | 00012 | Putri Anggraeni   | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta      |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah      | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung  |       74.53 |   30 |
+|  5 | 00020 | Uci Nurhayati     | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta  |       54.86 |   31 |
+|  6 | 00010 | Kartika Sari      | Perempuan     | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang    |       87.23 |   32 |
+|  8 | 00003 | Marssela Fitriani | Perempuan     | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam      |       96.18 |   31 |
+|  9 | 00014 | Nina Sari         | Perempuan     | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang    |        66.2 |   35 |
+| 12 | 00007 | Gita Suryani      | Perempuan     | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang |       90.51 |   29 |
+| 14 | 00019 | Indah Permata     | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan   |       87.77 |   27 |
+| 16 | 00016 | Ani Wati          | Perempuan     | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta  |       52.99 |   33 |
+| 18 | 00002 | Citra  Dewi       | Perempuan     | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung   |       66.97 |   35 |
++----+-------+-------------------+---------------+------------+------------+----------+-----------+----------------------------------+-------------+------+
+10 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE nip IN ('00001', '00012', '00018');
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+| id | nip   | nama                 | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                          | berat_badan | umur |
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono | Laki-Laki     | Bogor     | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok   |       79.02 |   21 |
+|  2 | 00012 | Putri Anggraeni      | Perempuan     | Jakarta   | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta     |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah         | Perempuan     | Bandung   | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung |       74.53 |   30 |
++----+-------+----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE tmp_lahir NOT IN ('Bogor', 'Jakarta', 'Bandung');
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki     | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
+|  6 | 00010 | Kartika Sari           | Perempuan     | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |   32 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki     | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan     | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |   31 |
+|  9 | 00014 | Nina Sari              | Perempuan     | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |   35 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki     | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 12 | 00007 | Gita Suryani           | Perempuan     | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |   29 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki     | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 14 | 00019 | Indah Permata          | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |   27 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki     | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki     | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+13 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> ORDER BY nama ASC;
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| 16 | 00016 | Ani Wati               | Perempuan     | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |       52.99 |   33 |
+| 18 | 00002 | Citra  Dewi            | Perempuan     | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |       66.97 |   35 |
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki     | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 12 | 00007 | Gita Suryani           | Perempuan     | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |   29 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki     | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 14 | 00019 | Indah Permata          | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |   27 |
+|  6 | 00010 | Kartika Sari           | Perempuan     | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |   32 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki     | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+|  8 | 00003 | Marssela Fitriani      | Perempuan     | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |   31 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki     | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki     | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+|  9 | 00014 | Nina Sari              | Perempuan     | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |   35 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki     | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah           | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |   30 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki     | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> ORDER BY berat_badan DESC;
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                   | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+|  8 | 00003 | Marssela Fitriani      | Perempuan     | Batam      | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam        |       96.18 |   31 |
+|  4 | 00009 | Taufik Ridwan          | Laki-Laki     | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+| 10 | 00006 | Oscar Putra Santoso    | Laki-Laki     | Manado     | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado   |       92.43 |   29 |
+|  2 | 00012 | Putri Anggraeni        | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |   29 |
+| 12 | 00007 | Gita Suryani           | Perempuan     | Palembang  | 1994-10-30 |        2 |         4 | Jl. Angkatan 45 No. 3, Palembang   |       90.51 |   29 |
+| 14 | 00019 | Indah Permata          | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan     |       87.77 |   27 |
+|  6 | 00010 | Kartika Sari           | Perempuan     | Semarang   | 1991-05-05 |        3 |         1 | Jl. Pahlawan No. 50, Semarang      |       87.23 |   32 |
+|  1 | 00001 | Eko Muchamad Haryono   | Laki-Laki     | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+|  3 | 00018 | Siti Hidayah           | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |   30 |
+|  7 | 00017 | Lukman Hakim           | Laki-Laki     | Pontianak  | 1993-02-14 |        3 |         3 | Jl. Sutoyo No. 10, Pontianak       |       71.58 |   31 |
+| 18 | 00002 | Citra  Dewi            | Perempuan     | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung     |       66.97 |   35 |
+|  9 | 00014 | Nina Sari              | Perempuan     | Malang     | 1988-07-07 |        3 |         2 | Jl. Diponegoro No. 12, Malang      |        66.2 |   35 |
+| 11 | 00015 | Fauzan Muhammad Rahman | Laki-Laki     | Medan      | 1991-04-18 |        2 |         2 | Jl. Sisingamangaraja No. 2, Medan  |       63.56 |   32 |
+| 13 | 00008 | Hendra Gunawan         | Laki-Laki     | Makassar   | 1987-08-12 |        2 |         3 | Jl. Urip Sumoharjo No. 6, Makassar |       61.86 |   36 |
+| 17 | 00013 | Muhammad Budi Santoso  | Laki-Laki     | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya          |       55.19 |   31 |
+|  5 | 00020 | Uci Nurhayati          | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
+| 15 | 00011 | Muhammad Joko Susanto  | Laki-Laki     | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar    |       53.26 |   34 |
+| 16 | 00016 | Ani Wati               | Perempuan     | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta    |       52.99 |   33 |
++----+-------+------------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> ORDER BY id ASC
+    -> LIMIT 5;
++----+-------+----------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama                 | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+----------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+|  1 | 00001 | Eko Muchamad Haryono | Laki-Laki     | Bogor      | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok      |       79.02 |   21 |
+|  2 | 00012 | Putri Anggraeni      | Perempuan     | Jakarta    | 1995-01-01 |        4 |         4 | Jl. Thamrin No. 10, Jakarta        |       92.32 |   29 |
+|  3 | 00018 | Siti Hidayah         | Perempuan     | Bandung    | 1994-02-02 |        4 |         2 | Jl. Ciumbuleuit No. 20, Bandung    |       74.53 |   30 |
+|  4 | 00009 | Taufik Ridwan        | Laki-Laki     | Surabaya   | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
+|  5 | 00020 | Uci Nurhayati        | Perempuan     | Yogyakarta | 1992-04-04 |        4 |         2 | Jl. Magelang No. 40, Yogyakarta    |       54.86 |   31 |
++----+-------+----------------------+---------------+------------+------------+----------+-----------+------------------------------------+-------------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY id DESC LIMIT 5 OFFSET 0;
++----+-------+-----------------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+| id | nip   | nama                  | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                          | berat_badan | umur |
++----+-------+-----------------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+| 18 | 00002 | Citra  Dewi           | Perempuan     | Bandung    | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung  |       66.97 |   35 |
+| 17 | 00013 | Muhammad Budi Santoso | Laki-Laki     | Surabaya   | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya       |       55.19 |   31 |
+| 16 | 00016 | Ani Wati              | Perempuan     | Jakarta    | 1990-05-15 |        1 |         1 | Jl. Mangga Besar No. 1, Jakarta |       52.99 |   33 |
+| 15 | 00011 | Muhammad Joko Susanto | Laki-Laki     | Denpasar   | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar |       53.26 |   34 |
+| 14 | 00019 | Indah Permata         | Perempuan     | Balikpapan | 1996-06-22 |        2 |         1 | Jl. Sudirman No. 7, Balikpapan  |       87.77 |   27 |
++----+-------+-----------------------+---------------+------------+------------+----------+-----------+---------------------------------+-------------+------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) as "jumlah pegawai" FROM pegawai;
++----------------+
+| jumlah pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT nip, nama, umur AS "umur pegawai paling tua"
+    -> FROM pegawai
+    -> WHERE umur = (
+    -> SELECT MAX(umur) AS max_umur
+    -> FROM pegawai);
++-------+----------------+-------------------------+
+| nip   | nama           | umur pegawai paling tua |
++-------+----------------+-------------------------+
+| 00008 | Hendra Gunawan |                      36 |
++-------+----------------+-------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT nip, nama, berat_badan
+    -> FROM pegawai
+    -> WHERE berat_badan = (
+    -> SELECT MIN(berat_badan)
+    -> FROM pegawai);
++-------+----------+-------------+
+| nip   | nama     | berat_badan |
++-------+----------+-------------+
+| 00016 | Ani Wati |       52.99 |
++-------+----------+-------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT AVG(umur) AS "rata - rata umur pegawai"
+    -> FROM pegawai;
++--------------------------+
+| rata - rata umur pegawai |
++--------------------------+
+|                  30.9444 |
++--------------------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki'
+    -> AND umur > 40
+    -> AND idjabatan = 2;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              0 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan'
+    -> AND umur < 40
+    -> AND idjabatan = 4;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              3 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan';
++--------------------------+
+| jumlah_pegawai_perempuan |
++--------------------------+
+|                       10 |
++--------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT SUM(1) AS jumlah_pegawai_SDM
+    -> FROM pegawai
+    -> WHERE iddivisi = 1;
++--------------------+
+| jumlah_pegawai_SDM |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT iddivisi,
+    -> CASE
+    -> WHEN iddivisi = 1 THEN 'SDM'
+    -> WHEN iddivisi = 2 THEN 'Keuangan'
+    -> WHEN iddivisi = 3 THEN 'Marketing'
+    -> WHEN iddivisi = 4 THEN 'IT'
+    -> END AS nama_divisi,
+    -> COUNT(*) AS jumlah_pegawai_berdasarkan_divisi
+    -> FROM pegawai
+    -> GROUP BY iddivisi;
++----------+-------------+----------------------------------+
+| iddivisi | nama_divisi | jumlah_pegawai_berdasarkan_divisi |
++----------+-------------+----------------------------------+
+| 1        | SDM         | 3                                |
+| 2        | Keuangan    | 5                                |
+| 3        | Marketing   | 5                                |
+| 4        | IT          | 5                                |
++----------+-------------+----------------------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT jenis_kelamin, COUNT(*) AS jumlah_pegawai_berdasarkan_jenis_kelamin
+    -> FROM pegawai
+    -> GROUP BY jenis_kelamin
+    -> HAVING COUNT(*) >= 10;
++---------------+------------------------------------------+
+| jenis_kelamin | jumlah_pegawai_berdasarkan_jenis_kelamin |
++---------------+------------------------------------------+
+| Perempuan     |                                       10 |
++---------------+------------------------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE nama LIKE 'Muhammad%';
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+| id | nip   | nama                  | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                          | berat_badan | umur |
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+| 15 | 00011 | Muhammad Joko Susanto | Laki-Laki     | Denpasar  | 1990-01-08 |        2 |         4 | Jl. Hayam Wuruk No. 8, Denpasar |       53.26 |   34 |
+| 17 | 00013 | Muhammad Budi Santoso | Laki-Laki     | Surabaya  | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya       |       55.19 |   31 |
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+---------------------------------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE nama LIKE '%Santoso';
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+----------------------------------+-------------+------+
+| id | nip   | nama                  | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                           | berat_badan | umur |
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+----------------------------------+-------------+------+
+| 10 | 00006 | Oscar Putra Santoso   | Laki-Laki     | Manado    | 1994-09-15 |        3 |         1 | Jl. Sam Ratulangi No. 13, Manado |       92.43 |   29 |
+| 17 | 00013 | Muhammad Budi Santoso | Laki-Laki     | Surabaya  | 1992-07-20 |        1 |         2 | Jl. Darmo No. 5, Surabaya        |       55.19 |   31 |
++----+-------+-----------------------+---------------+-----------+------------+----------+-----------+----------------------------------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Taufik Ridwan Asep'
+    -> WHERE id = 4;
+Query OK, 1 row affected (0.008 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE nama LIKE '%Asep%';
++----+-------+--------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+| id | nip   | nama               | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                             | berat_badan | umur |
++----+-------+--------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+|  4 | 00009 | Taufik Ridwan Asep | Laki-Laki     | Surabaya  | 1993-03-03 |        4 |         3 | Jl. Raya Surabaya No. 30, Surabaya |       95.69 |   31 |
++----+-------+--------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE SUBSTRING(nama, 5, 1) = 'S';
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-----------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                      | berat_badan | umur |
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-----------------------------+-------------+------+
+|  8 | 00003 | Marssela Fitriani | Perempuan     | Batam     | 1992-05-20 |        3 |         4 | Jl. Hang Tuah No. 11, Batam |       96.18 |   31 |
++----+-------+-------------------+---------------+-----------+------------+----------+-----------+-----------------------------+-------------+------+
+1 row in set (0.007 sec)
