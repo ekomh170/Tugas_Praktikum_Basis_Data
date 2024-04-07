@@ -512,12 +512,12 @@ MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE iddivisi = 3 AND umur > 30 AND 
 
 
 Jawaban No 26. Tampilkan data pegawai dengan klausa key (nip)
-MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip = '00001';
-+----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
-| id | nip   | nama                 | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                        | berat_badan | umur |
-+----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
-|  1 | 00001 | Eko Muchamad Haryono | Laki-Laki     | Bogor     | 2003-03-29 |        4 |         1 | Jl. Puspanegara No. 25, Depok |       79.02 |   21 |
-+----+-------+----------------------+---------------+-----------+------------+----------+-----------+-------------------------------+-------------+------+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip = '00002';
++----+-------+-------------+---------------+-----------+------------+----------+-----------+--------------------------------+-------------+------+
+| id | nip   | nama        | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                         | berat_badan | umur |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+--------------------------------+-------------+------+
+| 18 | 00002 | Citra  Dewi | Perempuan     | Bandung   | 1988-12-10 |        1 |         3 | Jl. Cihampelas No. 10, Bandung |       66.97 |   35 |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+--------------------------------+-------------+------+
 1 row in set (0.001 sec)
 
 
@@ -827,7 +827,7 @@ MariaDB [dbpegawai]> SELECT * FROM pegawai
 +----+-------+--------------------+---------------+-----------+------------+----------+-----------+------------------------------------+-------------+------+
 1 row in set (0.001 sec)
 
-== Sebelum Aksi Tugas Nomer 46. Melakukan Perubahan Untuk Mengubah ID 4 Agar Memiliki Nama Asep ==
+==== Sebelum Aksi Tugas Nomer 46. Melakukan Perubahan Untuk Mengubah ID 4 Agar Memiliki Nama Asep ====
 
 MariaDB [dbpegawai]> UPDATE pegawai
     -> SET nama = 'Taufik Ridwan Asep'
