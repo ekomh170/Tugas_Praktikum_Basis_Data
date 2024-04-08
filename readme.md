@@ -13,7 +13,7 @@ Repository ini dibuat untuk menyimpan kumpulan tugas dan praktikum yang berkaita
 
 ### Daftar Tugas:
 
-1. [Tugas 01 Dari Dosen - Membuat Database dbpegawai & Melakukan 47 Perintah SQL Sesuai Case]()
+1. [Tugas 01 Dari Dosen - Membuat Database dbpegawai & Melakukan 47 Perintah SQL Sesuai Case](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/Tugas1_0110223079_Eko-Muchamad-Haryono_TI02.txt)
 
 2. [Tugas Dari Asdos - Membuat Database dbkuliah](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/db_kuliah_eko_m_haryono.sql)
 
