@@ -35,4 +35,9 @@ Repository ini dibuat untuk menyimpan kumpulan tugas dan praktikum yang berkaita
 
 6. [Praktikum 06 - SQL SELECT LANJUTAN](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/Latihan%20Pertemuan%206.txt)
 
-7. [Praktikum 07 - Comming Soon](#)
+7. [Praktikum 07 - UTS](#)
+
+8. [Praktikum 08 - Instalasi MYSQL Workbench](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/praktikum_8_instalasi_mysql_workbench.png)
+
+9. [Praktikum 09 - Cara Penggunaan MYSQL Workbench](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/praktikum_9_db_toko_ekomh_ti02.png)
+9.1. [Praktikum 09 - Cara Menggunakan Syantax SQL Join](https://github.com/ekomh170/Tugas_Praktikum_Basis_Data/blob/master/praktikum_9_sql_join_tabel.txt)
