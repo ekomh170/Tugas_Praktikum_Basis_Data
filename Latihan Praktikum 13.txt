@@ -1,0 +1,171 @@
+PS C:\Users\Lenovo_Ideapad_G_3> mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 268
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++---------------------------+
+| Database                  |
++---------------------------+
+| db_app_kasir              |
+| db_kuliah_eko_m_haryono   |
+| db_task_2_jda_fase_2      |
+| db_toko_ekomh_pra_11      |
+| db_toko_ekomh_ti02        |
+| db_toko_online            |
+| dbpegawai                 |
+| dbpos                     |
+| dbpuskesmas               |
+| dbpuskesmas_laravel_11    |
+| dbpuskesmas_lutfi         |
+| dbpuskesmas_praktikum_6   |
+| dbpuskesmas_yum           |
+| dbrestoran_makanan        |
+| dbrestoran_makanan_revisi |
+| dbti02                    |
+| dbti02_test               |
+| dbtoko                    |
+| information_schema        |
+| jda                       |
+| mysql                     |
+| performance_schema        |
+| phpmyadmin                |
+| test                      |
++---------------------------+
+24 rows in set (0.004 sec)
+
+MariaDB [(none)]> use db_toko_ekomh_pra_11
+Database changed
+MariaDB [db_toko_ekomh_pra_11]> select * from pesanan
+    -> ;
++-------+------------+-----------+--------------+--------+------------+
+| kode  | tgl        | produk_id | pelanggan_id | jumlah | keterangan |
++-------+------------+-----------+--------------+--------+------------+
+| P0002 | 2024-05-11 |         1 |            2 |      3 |            |
+| P0001 | 2024-05-10 |         3 |            1 |      1 |            |
+| P0003 | 2024-05-11 |         6 |            2 |     15 |            |
++-------+------------+-----------+--------------+--------+------------+
+3 rows in set (0.002 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> select * from pelanggan;
++----+--------------+---------------+------------+----------------+----------+
+| id | nama         | alamat        | hp         | email          | foto     |
++----+--------------+---------------+------------+----------------+----------+
+|  1 | Budi Santoso | Bekasi Barat  | 0857654321 | budi@gmail.com | budi.jpg |
+|  2 | Siti Aminah  | Jakarta Barat | 0812654321 | siti@gmail.com | siti.jpg |
++----+--------------+---------------+------------+----------------+----------+
+2 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> select * from produk;
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE OR REPLACE TRIGGER kurangiStok
+    -> AFTER INSERT ON pesanan
+    -> FOR EACH ROW
+    -> BEGIN
+    -> UPDATE produk SET stok = stok - NEW.jumlah WHERE id = NEW.produk_id;
+    -> END $$
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE OR REPLACE TRIGGER updateStok
+    -> AFTER UPDATE ON pesanan
+    -> FOR EACH ROW
+    -> BEGIN
+    -> UPDATE produk SET stok = (stok + OLD.jumlah) - NEW.jumlah
+    -> WHERE id = OLD.produk_id;
+    -> END $$
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE OR REPLACE TRIGGER normalisasiStok
+    -> AFTER DELETE ON pesanan
+    -> FOR EACH ROW
+    -> BEGIN
+    -> UPDATE produk SET stok = stok + OLD.jumlah WHERE id = OLD.produk_id;
+    -> END $$
+Query OK, 0 rows affected (0.013 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE OR REPLACE TRIGGER normalisasiStok
+    -> AFTER DELETE ON pesanan
+    -> FOR EACH ROW
+    -> BEGIN
+    -> UPDATE produk SET stok = stok + OLD.jumlah WHERE id = OLD.produk_id;
+    -> END $$
+Query OK, 0 rows affected (0.017 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> INSERT INTO pesanan (kode, tgl, produk_id, pelanggan_id, jumlah, keterangan) VALUES ('P0004','2024-06-05',2,2,4,'beli meja belajar 4 biji');
+    -> $$
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER ;
+    -> $$
+	
+MariaDB [db_toko_ekomh_pra_11]> select * from produk
+    -> ;
+    -> $$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    2 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> UPDATE pesanan SET jumlah=6 WHERE kode='P0004';
+    -> $$
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db_toko_ekomh_pra_11]> select * from produk
+    -> $$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    0 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELETE FROM pesanan WHERE kode='P0004';
+    -> $$
+Query OK, 1 row affected (0.008 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> select * from produk
+    -> $$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.001 sec)

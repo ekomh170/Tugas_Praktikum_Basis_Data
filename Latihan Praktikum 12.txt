@@ -1,0 +1,320 @@
+Lenovo_Ideapad_G_3@DESKTOP-O9PDGKL c:\Xampp\xampp8.2.12
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 447
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++-------------------------+
+| Database                |
++-------------------------+
+| db_app_kasir            |
+| db_kuliah_eko_m_haryono |
+| db_task_2_jda_fase_2    |
+| db_toko_ekomh_pra_11    |
+| db_toko_ekomh_ti02      |
+| db_toko_online          |
+| dbpegawai               |
+| dbpos                   |
+| dbpuskesmas             |
+| dbpuskesmas_laravel_11  |
+| dbpuskesmas_lutfi       |
+| dbpuskesmas_praktikum_6 |
+| dbpuskesmas_yum         |
+| dbrestoran_makanan      |
+| dbti02                  |
+| dbti02_test             |
+| dbtoko                  |
+| information_schema      |
+| jda                     |
+| mysql                   |
+| performance_schema      |
+| phpmyadmin              |
+| test                    |
++-------------------------+
+23 rows in set (0.004 sec)
+
+MariaDB [(none)]> use db_toko_ekomh_pra_11
+Database changed
+MariaDB [db_toko_ekomh_pra_11]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+--------------+---------+---------+------+------------------+----------+
+| id | kode  | nama         | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+--------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi  | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | MJ002 | Meja Makan   | Bekas   | 4000000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa         | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin  | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer        | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+--------------+---------+---------+------+------------------+----------+
+6 rows in set (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> UPDATE produk set kode="SP002",nama="Speaker Simbada",kondisi="Bekas",harga=500000 where id=3;
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> UPDATE produk set kode="yyyy",nama="yyyyyyyyy",kondisi="Baru",harga=100000 where id=3;
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+--------------+---------+---------+------+------------------+----------+
+| id | kode  | nama         | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+--------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi  | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | yyyy  | yyyyyyyyy    | Baru    |  100000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa         | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin  | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer        | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+--------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> ROLLBACK
+    -> ;
+Query OK, 0 rows affected (0.002 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SAVEPOINT DELETE_RETUR;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM retur;
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+| id | kode  | pesanan_produk_id | pesanan_pelanggan_id | tgl        | jumlah | keterangan | foto |
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+|  1 | P0001 |                 1 |                    2 | 2024-05-15 |      3 |            |      |
+|  2 | P0002 |                 3 |                    1 | 2024-05-15 |      1 |            |      |
+|  3 | P0003 |                 6 |                    2 | 2024-05-15 |     15 |            |      |
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELETE FROM retur;
+Query OK, 3 rows affected (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM retur;
+Empty set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> ROLLBACK TO SAVEPOINT DELETE_RETUR;
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM retur;
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+| id | kode  | pesanan_produk_id | pesanan_pelanggan_id | tgl        | jumlah | keterangan | foto |
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+|  1 | P0001 |                 1 |                    2 | 2024-05-15 |      3 |            |      |
+|  2 | P0002 |                 3 |                    1 | 2024-05-15 |      1 |            |      |
+|  3 | P0003 |                 6 |                    2 | 2024-05-15 |     15 |            |      |
++----+-------+-------------------+----------------------+------------+--------+------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER #
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk#
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER ;
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk;
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk$$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk$$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE PROCEDURE showProduk()
+    -> BEGIN
+    -> SELECT kode,nama,kondisi,stok from produk;
+    -> END
+    -> $$
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> CALL showProduk()$$
++-------+-----------------+---------+------+
+| kode  | nama            | kondisi | stok |
++-------+-----------------+---------+------+
+| TV001 | TV 32 inchi     | Baru    |    4 |
+| MJ001 | Meja Belajar    | Baru    |    6 |
+| SP002 | Speaker Simbada | Bekas   |    3 |
+| SF111 | Sofa            | Baru    |    2 |
+| KP111 | Kipas Angin     | Bekas   |    2 |
+| MX111 | Mixer           | Bekas   |    5 |
++-------+-----------------+---------+------+
+6 rows in set (0.001 sec)
+
+Query OK, 0 rows affected (0.035 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SHOW PROCEDURE STATUS $$
++----------------------+------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db                   | Name       | Type      | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++----------------------+------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| db_toko_ekomh_pra_11 | showProduk | PROCEDURE | root@localhost | 2024-05-30 15:16:40 | 2024-05-30 15:16:40 | DEFINER       |         | utf8mb4              | utf8mb4_general_ci   | utf8mb4_general_ci |
++----------------------+------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+1 row in set (0.012 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DROP PROCEDURE showProduk;
+    -> ;
+    -> $$
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM produk$$
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  1 | TV001 | TV 32 inchi     | Baru    | 5000000 |    4 | produk_tv001.jpg |        1 |
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
+|  5 | KP111 | Kipas Angin     | Bekas   |  500000 |    2 | produk_KP111.jpg |        1 |
+|  6 | MX111 | Mixer           | Bekas   |  500000 |    5 | produk_MX111.jpg |        1 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+6 rows in set (0.001 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER ;
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE PROCEDURE showProduk()
+    -> BEGIN
+    -> SELECT kode,nama,kondisi,stok from produk;
+    -> END
+    -> $$
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER ;
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE PROCEDURE getProduk(idkat int)
+    -> SELECT * FROM produk WHERE jenis_id = idkat;
+    -> END$$
+Query OK, 0 rows affected (0.004 sec)
+
+
+MariaDB [db_toko_ekomh_pra_11]> CALL getProduk(2);
++----+-------+-----------------+---------+---------+------+------------------+----------+
+| id | kode  | nama            | kondisi | harga   | stok | foto             | jenis_id |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+|  2 | MJ001 | Meja Belajar    | Baru    | 2000000 |    6 | produk_mj001.jpg |        2 |
+|  3 | SP002 | Speaker Simbada | Bekas   |  500000 |    3 | produk_mj002.jpg |        2 |
+|  4 | SF111 | Sofa            | Baru    | 7000000 |    2 | produk_SF111.jpg |        2 |
++----+-------+-----------------+---------+---------+------+------------------+----------+
+3 rows in set (0.001 sec)
+
+Query OK, 0 rows affected (0.028 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> DELIMITER $$
+MariaDB [db_toko_ekomh_pra_11]> CREATE PROCEDURE inputSuplier(
+    -> nama varchar(45), alamat text, hp varchar(45), email varchar(45), website varchar(45))
+    -> BEGIN
+    -> INSERT INTO suplier(nama, alamat, hp, email, website) VALUES
+    -> (nama, alamat, hp, email, website);
+    -> END $$
+Query OK, 0 rows affected (0.010 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> Call inputSuplier('PT.CBA','Depok', 123456, 'info@cba.co.id', 'cba.com');
+    -> $$
+Query OK, 1 row affected (0.008 sec)
+
+MariaDB [db_toko_ekomh_pra_11]> SELECT * FROM suplier;
+    -> $$
++----+---------+------------------------------+--------------+----------------+---------+
+| id | nama    | alamat                       | hp           | email          | website |
++----+---------+------------------------------+--------------+----------------+---------+
+|  1 | PT. ABC | Pasar Minggu Jakarta Selatan | 08571239879  | info@abc.co.id | abc.com |
+|  2 | PT. XYZ | Pasar Rebo Jakarta Timur     | 081512398765 | info@xyz.co.id | xyz.com |
+|  3 | PT.CBA  | Depok                        | 123456       | info@cba.co.id | cba.com |
++----+---------+------------------------------+--------------+----------------+---------+
+3 rows in set (0.000 sec)

@@ -1,0 +1,72 @@
+-- MASUK KE SALAH SATU DB
+USE dbtoko;
+
+-- INPUT DATA JENIS PRODUK
+INSERT INTO jenis (nama) VALUES
+('Elektronik'),('Furniture'),('Souvenir');
+
+SELECT * FROM pesanan;
+
+-- INPUT DATA PRODUK
+INSERT INTO produk (kode, nama, kondisi, harga, stok, foto, jenis_id ) VALUES
+('TV001', 'TV 32 inchi', 'Baru',5000000, 4, 'produk_tv001.jpg', 1),
+('MJ001', 'Meja Belajar', 'Baru', 2000000, 6, 'produk_mj001.jpg', 2),
+('MJ002', 'Meja Makan', 'Second',4000000, 3, 'produk_mj002.jpg', 2),
+('SF111', 'Sofa', 'Baru', 7000000, 2, 'produk_SF111.jpg', 2),
+('KP111', 'Kipas Angin', 'Second', 500000, 2, 'produk_KP111.jpg', 1),
+('MX111', 'Mixer', 'Second', 500000, 5, 'produk_MX111.jpg', 1);
+
+-- INPUT DATA PELANGGAN
+INSERT INTO pelanggan (nama, alamat, hp, email, foto) VALUES
+('Budi Santoso', 'Bekasi Barat', '0857654321','budi@gmail.com', 'budi.jpg'),
+('Siti Aminah', 'Jakarta Barat', '0812654321','siti@gmail.com', 'siti.jpg');
+
+-- INPUT DATA PESANAN
+INSERT INTO pesanan (kode, tgl, produk_id, pelanggan_id, jumlah, keterangan) VALUES
+('P0001', '2024-05-10', 3, 1, 1,''),
+('P0002', '2024-05-11', 1, 2, 3,''),
+('P0003', '2024-05-11', 6, 2, 15,'');
+
+
+-- INPUT DATA SUPLIER
+INSERT INTO supplier (nama, alamat, hp, email, website) VALUES
+('PT. ABC', 'Pasar Minggu Jakarta Selatan', '08571239879', 'info@abc.co.id', 'abc.com'),
+('PT. XYZ', 'Pasar Rebo Jakarta Timur', '081512398765', 'info@xyz.co.id', 'xyz.com');
+
+
+-- INPUT DATA SUPLAI_PRODUK
+INSERT INTO suplai_produk (kode, tgl, supplier_id, produk_id, jumlah, keterangan) VALUES
+('SP001', '2024-05-13', 1, 3, 5, ''),
+('SP002', '2024-05-13', 2, 1, 3, ''),
+('SP003', '2024-05-13', 1, 6, 5, ''),
+('SP004', '2024-05-13', 2, 5, 3, '');
+
+
+-- INPUT DATA RETUR
+INSERT INTO retur (kode, pesanan_produk_id, pesanan_pelanggan_id, tgl, jumlah, keterangan, foto) VALUES
+('', , ,'', , '', ''),
+
+
+
+-- INNER JOIN 2 TABEL
+SELECT produk.nama, produk.kondisi, produk.harga, produk.stok, jenis.nama AS kategori
+FROM jenis INNER JOIN produk
+ON jenis.id = produk.jenis_id;
+
+-- OUTER JOIN 2 TABLE
+SELECT produk.nama, produk.kondisi, produk.harga, produk.stok, jenis.nama AS kategori
+FROM jenis LEFT JOIN produk
+ON jenis.id = produk.jenis_id;
+
+-- INNER JOIN 4 TABEL
+SELECT pelanggan.nama AS customer, pesanan.kode, pesanan.tgl, produk.nama,
+jenis.nama AS kategori, produk.kondisi, produk.harga, pesanan.jumlah 
+FROM pesanan 
+INNER JOIN pelanggan ON pelanggan.id = pesanan.pelanggan_id
+INNER JOIN produk ON produk.id = pesanan.produk_id
+INNER JOIN jenis ON jenis.id = produk.jenis_id;
+
+
+
+
+

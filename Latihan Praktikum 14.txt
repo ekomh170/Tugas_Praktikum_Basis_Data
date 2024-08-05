@@ -1,0 +1,255 @@
+PS C:\Users\Lenovo_Ideapad_G_3> mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 268
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++---------------------+
+| Database            |
++---------------------+
+| dbkuliah            |
+| dbpegawai           |
+| dbpuskesmas_laravel |
+| dbti02              |
+| dbtoko_ti02         |
+| information_schema  |
+| mysql               |
+| performance_schema  |
+| phpmyadmin          |
+| test                |
++---------------------+
+10 rows in set (0.001 sec)
+
+MariaDB [(none)]> use dbtoko_ti02;
+Database changed
+MariaDB [dbtoko_ti02]> show tables;
++-----------------------+
+| Tables_in_dbtoko_ti02 |
++-----------------------+
+| jenis                 |
+| pelanggan             |
+| pesanan               |
+| pesanan_v             |
+| produk                |
+| retur                 |
+| suplai_produk         |
+| suplier               |
++-----------------------+
+8 rows in set (0.001 sec)
+
+MariaDB [dbtoko_ti02]> mysql -u root -p
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'mysql -u root -p' at line 1
+MariaDB [dbtoko_ti02]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 27
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> grant all privileges on . to mahdi@localhost
+    -> IDENTIFIED BY 'mahdi123';
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.002 sec)
+
+MariaDB [(none)]> grant all privileges on dbtoko_ti02.* to pathi@localhost
+    -> IDENTIFIED BY 'pathi123';
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> grant delete,insert on dbtoko_ti02.produk to arya@localhost
+    -> IDENTIFIED BY 'arya123';
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> show grants;
++---------------------------------------------------------------------+
+| Grants for root@localhost                                           |
++---------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON . TO root@localhost WITH GRANT OPTION |
+| GRANT PROXY ON ''@'%' TO 'root'@'localhost' WITH GRANT OPTION       |
++---------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [(none)]> show grants for 'mahdi@localhost';
+ERROR 1141 (42000): There is no such grant defined for user 'mahdi@localhost' on host '%'
+MariaDB [(none)]> show grants for 'mahdi'@'localhost';
++-----------------------------------------------------------------------------------------------------------------------+
+| Grants for mahdi@localhost                                                                                            |
++-----------------------------------------------------------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON . TO mahdi@localhost IDENTIFIED BY PASSWORD '*7BD7CCC39CC3744835E6B49E7E61E6789322558A' |
++-----------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.000 sec)
+
+MariaDB [(none)]> show grants for 'pahti'@'localhost';
+ERROR 1141 (42000): There is no such grant defined for user 'pahti' on host 'localhost'
+MariaDB [(none)]> show grants for 'arya'@'localhost';
++-------------------------------------------------------------------------------------------------------------+
+| Grants for arya@localhost                                                                                   |
++-------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON . TO arya@localhost IDENTIFIED BY PASSWORD '*4741B3D93CCFFDD786687FF898BF8806BD1BB472' |
+| GRANT INSERT, DELETE ON dbtoko_ti02.produk TO arya@localhost                                        |
++-------------------------------------------------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [(none)]> show grants for 'pathi'@'localhost';
++--------------------------------------------------------------------------------------------------------------+
+| Grants for pathi@localhost                                                                                   |
++--------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON . TO pathi@localhost IDENTIFIED BY PASSWORD '*2658A9E958D20119C2D337EC3B1CB30D40BF21ED' |
+| GRANT ALL PRIVILEGES ON dbtoko_ti02.* TO pathi@localhost                                               |
++--------------------------------------------------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [(none)]> /q
+    ->
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '/q' at line 1
+MariaDB [(none)]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u mahdi -pmahdi123
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 40
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u mahdi -pmahdi123 dbtoko
+ERROR 1049 (42000): Unknown database 'dbtoko'
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u mahdi -pmahdi123 dbtoko_ti02
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 42
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [dbtoko_ti02]> show databases;
++---------------------+
+| Database            |
++---------------------+
+| dbkuliah            |
+| dbpegawai           |
+| dbpuskesmas_laravel |
+| dbti02              |
+| dbtoko_ti02         |
+| information_schema  |
+| mysql               |
+| performance_schema  |
+| phpmyadmin          |
+| test                |
++---------------------+
+10 rows in set (0.002 sec)
+
+MariaDB [dbtoko_ti02]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u pathi -ppathi123 dbtoko_ti02
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 43
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [dbtoko_ti02]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dbtoko_ti02        |
+| information_schema |
+| test               |
++--------------------+
+3 rows in set (0.002 sec)
+
+MariaDB [dbtoko_ti02]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u arya -parya123 dbtoko_ti02
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 44
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [dbtoko_ti02]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dbtoko_ti02        |
+| information_schema |
+| test               |
++--------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbtoko_ti02]> show tables;
++-----------------------+
+| Tables_in_dbtoko_ti02 |
++-----------------------+
+| produk                |
++-----------------------+
+1 row in set (0.002 sec)
+
+MariaDB [dbtoko_ti02]> \q
+Bye
+
+admin@DESKTOP-HE0KDM3 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 45
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> revoke delete on dbtoko_ti02 from.produk 'arya'@'localhost';
+ERROR 1046 (3D000): No database selected
+MariaDB [(none)]> revoke delete on dbtoko_ti02.produk from 'arya'@'localhost';
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [(none)]> show grants for 'arya'@'localhost';
++-------------------------------------------------------------------------------------------------------------+
+| Grants for arya@localhost                                                                                   |
++-------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON . TO arya@localhost IDENTIFIED BY PASSWORD '*4741B3D93CCFFDD786687FF898BF8806BD1BB472' |
+| GRANT INSERT ON dbtoko_ti02.produk TO arya@localhost                                                |
++-------------------------------------------------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [(none)]>
